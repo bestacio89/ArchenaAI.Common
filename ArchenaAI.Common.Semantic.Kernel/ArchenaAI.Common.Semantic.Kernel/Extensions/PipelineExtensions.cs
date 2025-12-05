@@ -23,6 +23,12 @@ namespace ArchenaAI.Common.Semantic.Kernel.Extensions
             // Pipeline executor
             services.AddSingleton<IPipelineExecutor, PipelineExecutor>();
 
+
+            services.AddSingleton<IKernelPipelineBehavior, ValidationBehavior>();
+            services.AddSingleton<IKernelPipelineBehavior, RetryBehavior>();
+            services.AddSingleton<IKernelPipelineBehavior, TimeoutBehavior>();
+
+
             return services;
         }
     }
