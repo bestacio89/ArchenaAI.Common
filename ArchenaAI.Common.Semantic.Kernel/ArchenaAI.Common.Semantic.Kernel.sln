@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36429.23
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchenaAI.Common.Semantic.Kernel", "ArchenaAI.Common.Semantic.Kernel\ArchenaAI.Common.Semantic.Kernel.csproj", "{6B066548-6D99-4D52-AD0D-E6198C1FA8D7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchenaAI.Common.Kernel.Tests", "ArchenaAI.Common.Kernel.Tests\ArchenaAI.Common.Kernel.Tests.csproj", "{8B8A255F-5063-4EA9-BD1B-B842641A013F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
@@ -13,20 +11,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{02EA681E
 		ArchenaAI.Common.Semantic.Kernel\build\version.props = ArchenaAI.Common.Semantic.Kernel\build\version.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchenaAI.Common.Semantic.Kernel", "Source\ArchenaAI.Common.Semantic.Kernel\ArchenaAI.Common.Semantic.Kernel.csproj", "{AFA482B4-A2BB-52E6-335E-B86B39C77AF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6B066548-6D99-4D52-AD0D-E6198C1FA8D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B066548-6D99-4D52-AD0D-E6198C1FA8D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B066548-6D99-4D52-AD0D-E6198C1FA8D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B066548-6D99-4D52-AD0D-E6198C1FA8D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B8A255F-5063-4EA9-BD1B-B842641A013F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B8A255F-5063-4EA9-BD1B-B842641A013F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B8A255F-5063-4EA9-BD1B-B842641A013F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B8A255F-5063-4EA9-BD1B-B842641A013F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFA482B4-A2BB-52E6-335E-B86B39C77AF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFA482B4-A2BB-52E6-335E-B86B39C77AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFA482B4-A2BB-52E6-335E-B86B39C77AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFA482B4-A2BB-52E6-335E-B86B39C77AF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
