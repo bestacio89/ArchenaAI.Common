@@ -1,5 +1,5 @@
 
-# **AArchenaAI.Common**
+# **AArchenaAI.Common**\
 
 *A Modular AI Orchestration & Semantic Computing Foundation for .NET*
 

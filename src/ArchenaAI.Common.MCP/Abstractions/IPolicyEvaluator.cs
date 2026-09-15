@@ -1,6 +1,5 @@
 ﻿using Aegis.Shared.Architecture.Enums;
 using Aegis.Shared.Architecture.Models;
-using ArchenaAI.Common.MCP.Models;
 
 namespace ArchenaAI.Common.MCP.Abstractions
 {
@@ -10,9 +9,9 @@ namespace ArchenaAI.Common.MCP.Abstractions
         ArchitectureRuleSeverity Severity { get; }
 
         void Evaluate(
-            RuntimeActionDescriptor action,
-            AuthorityToken authority,
-            ExecutionBudget budget,
+            IRuntimeActionDescriptor action,
+            IAuthorityToken authority,
+            IExecutionBudget budget,
             ArchitectureEvaluatorResult result);
     }
 }
