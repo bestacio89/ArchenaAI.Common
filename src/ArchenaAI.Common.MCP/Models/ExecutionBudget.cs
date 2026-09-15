@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ArchenaAI.Common.MCP.Models
 {
-    public sealed record ExecutionBudget : IExecutionBudget
+    public sealed partial record ExecutionBudget : IExecutionBudget
     {
         public int MaxReasoningSteps { get; init; }
         public int MaxToolCalls { get; init; }

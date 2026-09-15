@@ -6,4 +6,11 @@
     <ProjectReference Include="..\ArchenaAI.Common.Semantic.Kernel\ArchenaAI.Common.Semantic.Kernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Ensure transitive vulnerabilities are overridden -->
+    <PackageReference Include="OpenTelemetry.Api" Version="1.18.0" />
+    <PackageReference Include="SharpCompress" Version="0.50.4" />
+    <PackageReference Include="Snappier" Version="1.3.1" />
+  </ItemGroup>
+
 </Project>

@@ -2,72 +2,113 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <!-- ============================================================
-       Shared Build Configuration for ArchenaAI.Common Modules
-       Import in each project using:
+       ArchenaAI.Common
+       Shared build policy for all ArchenaAI.Common modules.
+
+       Imported by individual projects using:
        <Import Project="..\..\build\Common.targets" />
        ============================================================ -->
 
+  <!-- ============================================================
+       Framework / Language
+       ============================================================ -->
   <PropertyGroup>
-    <!-- Core Build Settings -->
     <TargetFramework>net10.0</TargetFramework>
+
     <LangVersion>latest</LangVersion>
+
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <!-- Versioning (manually bump or automate later) -->
-    <Version>0.1.0</Version>
-    <AssemblyVersion>0.1.0</AssemblyVersion>
-    <FileVersion>0.1.0</FileVersion>
-
-    <!-- Author Info -->
-    <Authors>Bernardo Estacio Abreu</Authors>
-    <Company>ArchenaAI Project</Company>
-
-    <!-- Documentation -->
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-
-    <!-- Deterministic Builds -->
     <Deterministic>true</Deterministic>
   </PropertyGroup>
 
 
   <!-- ============================================================
-       NuGet Package Metadata
+       Build Quality
        ============================================================ -->
   <PropertyGroup>
-    <PackageId>$(MSBuildProjectName)</PackageId>
+    <!-- Temporarily relax warnings-as-errors to allow incremental fixes after package updates -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 
-    <!-- Replace this per-project if needed -->
-    <Description>Core module of the ArchenaAI.Common framework.</Description>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
-    <Copyright>
-      Copyright © 2025 Bernardo Estacio Abreu
-    </Copyright>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-    <RepositoryUrl>
-      https://github.com/bestacio89/ArchenaAI.Common
-    </RepositoryUrl>
-
-    <RepositoryType>git</RepositoryType>
-    <RepositoryBranch>main</RepositoryBranch>
-    <RepositoryCommit>$(SourceRevisionId)</RepositoryCommit>
-
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-
-    <PackageTags>
-      ArchenaAI;AI;Semantic;Kernel;Runtime;Orchestration;Agents;Framework
-    </PackageTags>
-
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-
-    <!-- Enable NuGet packing -->
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!-- Keep generated documentation warnings from breaking builds
+         until the public API documentation baseline is complete. -->
+    <NoWarn>
+      $(NoWarn);
+      CS1591
+    </NoWarn>
   </PropertyGroup>
 
 
   <!-- ============================================================
-       Include README.md in the NuGet package if present
+       Versioning
        ============================================================ -->
+  <PropertyGroup>
+    <!-- Versioning (explicit values to avoid empty assembly attributes during build) -->
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <Version>0.1.0</Version>
+    <!-- Keep assembly identity independent from package versioning. -->
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       Package Metadata
+       ============================================================ -->
+  <PropertyGroup>
+    <PackageId Condition="'$(PackageId)' == ''">
+      $(MSBuildProjectName)
+    </PackageId>
+
+    <Authors Condition="'$(Authors)' == ''">
+      Bernardo Estacio Abreu
+    </Authors>
+
+    <Company Condition="'$(Company)' == ''">
+      ArchenaAI Project
+    </Company>
+
+    <Description Condition="'$(Description)' == ''">
+      Core module of the ArchenaAI.Common framework.
+    </Description>
+
+    <Copyright Condition="'$(Copyright)' == ''">
+      Copyright Â© 2026 Bernardo Estacio Abreu
+    </Copyright>
+
+    <RepositoryUrl Condition="'$(RepositoryUrl)' == ''">
+      https://github.com/bestacio89/ArchenaAI.Common
+    </RepositoryUrl>
+
+    <RepositoryType Condition="'$(RepositoryType)' == ''">
+      git
+    </RepositoryType>
+
+    <PackageLicenseExpression Condition="'$(PackageLicenseExpression)' == ''">
+      MIT
+    </PackageLicenseExpression>
+
+    <PackageTags Condition="'$(PackageTags)' == ''">
+      ArchenaAI;AI;Semantic;Kernel;Runtime;Orchestration;Agents;Framework
+    </PackageTags>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+
+  <!-- ============================================================
+       README
+       ============================================================ -->
+  <PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\README.md')">
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
   <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)\README.md')">
     <None Include="$(MSBuildProjectDirectory)\README.md"
           Pack="true"
