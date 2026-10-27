@@ -19,19 +19,19 @@
 
   <!-- 🧩 Franz Framework dependencies -->
   <ItemGroup>
-    <PackageReference Include="Franz.Common" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Business" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Mediator" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Mediator.Polly" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Mediator.OpenTelemetry" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Logging" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Caching" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Messaging" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Messaging.Kafka" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Http" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Http.Refit" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Hosting" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.DependencyInjection" Version="1.6.21" />
+    <PackageReference Include="Franz.Common" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Business" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Mediator" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Mediator.Polly" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Mediator.OpenTelemetry" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Logging" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Caching" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Messaging" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Messaging.Kafka" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Http" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Http.Refit" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Hosting" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.DependencyInjection" Version="2.3.1" />
   </ItemGroup>
 
   <!-- ⚙️ Support dependencies -->
