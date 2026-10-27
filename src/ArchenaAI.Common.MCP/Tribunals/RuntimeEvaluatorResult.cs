@@ -1,18 +1,15 @@
-﻿using Aegis.Shared.Architecture.Models;
 using ArchenaAI.Common.MCP.Abstractions;
+using ArchenaAI.Common.MCP.Models;
 
-namespace ArchenaAI.Common.MCP.Tribunals
+namespace ArchenaAI.Common.MCP.Tribunals;
+
+public static class RuntimeEvaluatorResult
 {
-    public static class RuntimeEvaluatorResult
-    {
-        public static ArchitectureEvaluatorResult ForAction(IRuntimeActionDescriptor action)
-            => new(
-                source: "MCP.RuntimeTribunal",
-                target: action.ActionId,
-                domain: "Runtime")
-            {
-                Category = "Execution",
-                Layer = action.OriginLayer
-            };
-    }
+    public static GovernanceEvaluationResult ForAction(IRuntimeActionDescriptor action) =>
+        new()
+        {
+            Source = "MCP.RuntimeTribunal",
+            Target = action.ActionId,
+            Category = "Execution"
+        };
 }
