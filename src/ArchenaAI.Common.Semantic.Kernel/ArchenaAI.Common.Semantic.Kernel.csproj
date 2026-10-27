@@ -8,7 +8,7 @@
     <!-- ✅ These are project-unique details -->
     <PackageId>ArchenaAI.Common.SemanticKernel</PackageId>
     <Description>Common semantic kernel library for ArchenaAI agents. Powered by the Franz Framework.</Description>
-    <RepositoryUrl>https://dev.azure.com/AjnaTellus/ArchenaAI/_git/ArchenaAI.Common.SemanticKernel</RepositoryUrl>
+    <RepositoryUrl>https://github.com/bestacio89/ArchenaAI.Common</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
     <!-- 📦 Package publishing -->
@@ -19,29 +19,29 @@
 
   <!-- 🧩 Franz Framework dependencies -->
   <ItemGroup>
-    <PackageReference Include="Franz.Common" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Business" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Mediator" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Mediator.Polly" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Mediator.OpenTelemetry" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Logging" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Caching" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Messaging" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Messaging.Kafka" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Http" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Http.Refit" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.Hosting" Version="1.6.21" />
-    <PackageReference Include="Franz.Common.DependencyInjection" Version="1.6.21" />
+    <PackageReference Include="Franz.Common" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Business" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Mediator" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Mediator.Polly" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Mediator.OpenTelemetry" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Logging" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Caching" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Messaging" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Messaging.Kafka" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Http" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Http.Refit" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.Hosting" Version="2.3.1" />
+    <PackageReference Include="Franz.Common.DependencyInjection" Version="2.3.1" />
   </ItemGroup>
 
-  <!-- ⚙️ Support dependencies -->
+  <!-- ⚙️ Support dependencies aligned with Franz.Common 2.3.1 -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
-    <PackageReference Include="Polly" Version="8.6.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.14" />
+    <PackageReference Include="Polly" Version="8.7.0" />
     <!-- Override transitive packages with patched versions to avoid known vulnerabilities -->
     <PackageReference Include="OpenTelemetry.Api" Version="1.18.0" />
-    <PackageReference Include="SharpCompress" Version="0.50.4" />
+    <PackageReference Include="SharpCompress" Version="0.50.7" />
     <PackageReference Include="Snappier" Version="1.3.1" />
     <PackageReference Include="Volo.Abp.Core" Version="10.0.0" />
   </ItemGroup>
@@ -60,9 +60,8 @@
   <!-- 📘 Documentation & build artifacts -->
   <ItemGroup>
     <None Include="docs\**\*" Pack="true" PackagePath="docs" />
-    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
- 
+
   <Target Name="DebugPrintProps" BeforeTargets="BeforeBuild">
     <Message Text="TFM: $(TargetFramework)" Importance="High" />
     <Message Text="SolutionDir: $(SolutionDir)" Importance="High" />

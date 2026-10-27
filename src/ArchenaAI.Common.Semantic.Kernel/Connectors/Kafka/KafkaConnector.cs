@@ -1,6 +1,6 @@
 ﻿using Confluent.Kafka;
-using Franz.Common.Messaging.Configuration;
 using Franz.Common.Messaging.Kafka;
+using Franz.Common.Messaging.Kafka.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
@@ -12,16 +12,16 @@ namespace ArchenaAI.Common.Semantic.Kernel.Connectors.Kafka
     /// </summary>
     public sealed class KafkaConnector : IKafkaConnector
     {
-        private readonly IOptions<MessagingOptions> _options;
+        private readonly IOptions<KafkaMessagingOptions> _options;
         private readonly IKafkaConsumerFactory _consumerFactory;
         private readonly ILogger<KafkaConnector> _logger;
         private readonly IProducer<string, string> _producer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KafkaConnector"/> class.
+        /// Initializes a new instance of the <see cref="KafkaConnector" /> class.
         /// </summary>
         public KafkaConnector(
-            IOptions<MessagingOptions> options,
+            IOptions<KafkaMessagingOptions> options,
             IKafkaConsumerFactory consumerFactory,
             ILogger<KafkaConnector> logger)
         {
@@ -29,13 +29,52 @@ namespace ArchenaAI.Common.Semantic.Kernel.Connectors.Kafka
             _consumerFactory = consumerFactory ?? throw new ArgumentNullException(nameof(consumerFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
+            var kafkaOptions = _options.Value;
             var producerConfig = new ProducerConfig
             {
-                BootstrapServers = _options.Value.BootStrapServers,
-                Acks = Acks.All,
-                EnableIdempotence = true,
-                LingerMs = 10,
-                BatchSize = 32 * 1024
+                BootstrapServers = kafkaOptions.BootstrapServers,
+                ClientId = kafkaOptions.ClientId,
+                Acks = kafkaOptions.Producer.Acks switch
+                {
+                    KafkaAcks.None => Acks.None,
+                    KafkaAcks.Leader => Acks.Leader,
+                    _ => Acks.All
+                },
+                EnableIdempotence = kafkaOptions.Producer.EnableIdempotence,
+                LingerMs = kafkaOptions.Producer.LingerMs,
+                BatchSize = kafkaOptions.Producer.BatchSize,
+                MessageMaxBytes = kafkaOptions.Producer.MessageMaxBytes,
+                MessageSendMaxRetries = kafkaOptions.Producer.MessageSendMaxRetries,
+                RetryBackoffMs = kafkaOptions.Producer.RetryBackoffMs,
+                CompressionType = kafkaOptions.Producer.CompressionType switch
+                {
+                    KafkaCompressionType.Gzip => Confluent.Kafka.CompressionType.Gzip,
+                    KafkaCompressionType.Lz4 => Confluent.Kafka.CompressionType.Lz4,
+                    KafkaCompressionType.Zstd => Confluent.Kafka.CompressionType.Zstd,
+                    KafkaCompressionType.None => Confluent.Kafka.CompressionType.None,
+                    _ => Confluent.Kafka.CompressionType.Snappy
+                },
+                SecurityProtocol = kafkaOptions.Security.SecurityProtocol switch
+                {
+                    KafkaSecurityProtocol.Ssl => Confluent.Kafka.SecurityProtocol.Ssl,
+                    KafkaSecurityProtocol.SaslPlaintext => Confluent.Kafka.SecurityProtocol.SaslPlaintext,
+                    KafkaSecurityProtocol.SaslSsl => Confluent.Kafka.SecurityProtocol.SaslSsl,
+                    _ => Confluent.Kafka.SecurityProtocol.Plaintext
+                },
+                SaslMechanism = kafkaOptions.Security.SaslMechanism switch
+                {
+                    KafkaSaslMechanism.Plain => Confluent.Kafka.SaslMechanism.Plain,
+                    KafkaSaslMechanism.ScramSha256 => Confluent.Kafka.SaslMechanism.ScramSha256,
+                    KafkaSaslMechanism.ScramSha512 => Confluent.Kafka.SaslMechanism.ScramSha512,
+                    KafkaSaslMechanism.Gssapi => Confluent.Kafka.SaslMechanism.Gssapi,
+                    KafkaSaslMechanism.OAuthBearer => Confluent.Kafka.SaslMechanism.OAuthBearer,
+                    _ => null
+                },
+                SaslUsername = kafkaOptions.Security.SaslUsername,
+                SaslPassword = kafkaOptions.Security.SaslPassword,
+                SslCaLocation = kafkaOptions.Security.SslCaLocation,
+                SslCertificateLocation = kafkaOptions.Security.SslCertificateLocation,
+                SslKeyLocation = kafkaOptions.Security.SslKeyLocation
             };
 
             _producer = new ProducerBuilder<string, string>(producerConfig).Build();
@@ -78,8 +117,8 @@ namespace ArchenaAI.Common.Semantic.Kernel.Connectors.Kafka
 
             _logger.LogInformation("[KafkaConnector] Subscribing to topic '{Topic}'", topic);
 
-            // Franz factory builds its own consumer internally
-            var consumer = _consumerFactory.Build(default!);
+            // Franz owns consumer configuration; its factory takes no arguments.
+            var consumer = _consumerFactory.Build();
 
             await Task.Run(() =>
             {
@@ -89,13 +128,12 @@ namespace ArchenaAI.Common.Semantic.Kernel.Connectors.Kafka
                 {
                     try
                     {
-                        // Franz expects a TimeSpan poll interval instead of CancellationToken
                         var record = consumer.Consume(TimeSpan.FromMilliseconds(250));
 
                         if (record?.Message?.Value is null)
                             continue;
 
-                        var message = record.Message.Value.ToString() ?? string.Empty;
+                        var message = record.Message.Value;
 
                         _logger.LogDebug("[KafkaConnector] Message received from '{Topic}': {Message}", topic, message);
 
