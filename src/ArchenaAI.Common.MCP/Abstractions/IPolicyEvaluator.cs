@@ -1,17 +1,15 @@
-﻿using Aegis.Shared.Architecture.Enums;
-using Aegis.Shared.Architecture.Models;
+using ArchenaAI.Common.MCP.Models;
 
-namespace ArchenaAI.Common.MCP.Abstractions
+namespace ArchenaAI.Common.MCP.Abstractions;
+
+public interface IPolicyEvaluator
 {
-    public interface IPolicyEvaluator
-    {
-        string RuleId { get; }
-        ArchitectureRuleSeverity Severity { get; }
+    string RuleId { get; }
+    GovernanceSeverity Severity { get; }
 
-        void Evaluate(
-            IRuntimeActionDescriptor action,
-            IAuthorityToken authority,
-            IExecutionBudget budget,
-            ArchitectureEvaluatorResult result);
-    }
+    void Evaluate(
+        IRuntimeActionDescriptor action,
+        IAuthorityToken authority,
+        IExecutionBudget budget,
+        GovernanceEvaluationResult result);
 }

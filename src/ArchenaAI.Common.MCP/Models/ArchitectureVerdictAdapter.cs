@@ -1,39 +1,35 @@
-﻿using Aegis.Shared.Architecture.Enums;
-using Aegis.Shared.Architecture.Models;
-using Aegis.Shared.Architecture.Models.Rules;
 using ArchenaAI.Common.MCP.Abstractions;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace ArchenaAI.Common.MCP.Models
+namespace ArchenaAI.Common.MCP.Models;
+
+/// <summary>
+/// Adapts a provider-neutral governance evaluation to the verdict contract.
+/// The historical class name is retained to avoid an unnecessary public rename.
+/// </summary>
+public sealed class ArchitectureVerdictAdapter : IVerdict
 {
-    public sealed class ArchitectureVerdictAdapter : IVerdict
+    private readonly GovernanceEvaluationResult _result;
+    private readonly GovernanceSeverity _denyThreshold;
+
+    public ArchitectureVerdictAdapter(
+        GovernanceEvaluationResult result,
+        GovernanceSeverity denyThreshold)
     {
-        private readonly ArchitectureEvaluatorResult _result;
-        private readonly ArchitectureRuleSeverity _denyThreshold;
-
-        public ArchitectureVerdictAdapter(
-            ArchitectureEvaluatorResult result,
-            ArchitectureRuleSeverity denyThreshold)
-        {
-            _result = result;
-            _denyThreshold = denyThreshold;
-        }
-
-        // Only genuine violations count — a passing rule tagged Critical
-        // is not a reason to deny anything.
-        private IEnumerable<ArchitectureRuleresult> Violations =>
-            _result.RuleResults.Where(r => !r.IsCompliant);
-
-        public bool IsAllowed =>
-            !Violations.Any(r => r.Severity >= _denyThreshold);
-
-        public ArchitectureRuleSeverity MaxSeverity =>
-            Violations.Any()
-                ? Violations.Max(r => r.Severity)
-                : ArchitectureRuleSeverity.Info;
-
-        public IReadOnlyCollection<string> ViolatedRuleIds =>
-            Violations.Select(r => r.RuleId).ToArray();
+        _result = result ?? throw new ArgumentNullException(nameof(result));
+        _denyThreshold = denyThreshold;
     }
+
+    private IEnumerable<GovernanceRuleResult> Violations =>
+        _result.RuleResults.Where(rule => !rule.IsCompliant);
+
+    public bool IsAllowed => _result.IsAllowed(_denyThreshold);
+
+    public GovernanceSeverity MaxSeverity =>
+        Violations.Any()
+            ? Violations.Max(rule => rule.Severity)
+            : GovernanceSeverity.Info;
+
+    public IReadOnlyCollection<string> ViolatedRuleIds =>
+        Violations.Select(rule => rule.RuleId).ToArray();
 }

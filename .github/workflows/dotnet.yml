@@ -26,14 +26,17 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Restore kernel
-        run: dotnet restore src/ArchenaAI.Common.Semantic.Kernel/ArchenaAI.Common.Semantic.Kernel.csproj
+      - name: Restore solution
+        run: dotnet restore ArchenaAI.Common.slnx
 
       - name: Build kernel
         run: dotnet build src/ArchenaAI.Common.Semantic.Kernel/ArchenaAI.Common.Semantic.Kernel.csproj --configuration Release --no-restore
 
       - name: Build runtime
-        run: dotnet build src/ArchenaAI.Common.Semantic.Runtime/ArchenaAI.Common.Semantic.Runtime.csproj --configuration Release
+        run: dotnet build src/ArchenaAI.Common.Semantic.Runtime/ArchenaAI.Common.Semantic.Runtime.csproj --configuration Release --no-restore
 
-      - name: Run kernel tests
-        run: dotnet test ArchenaAI.Common.Kernel.Tests/ArchenaAI.Common.Kernel.Tests.csproj --configuration Release
+      - name: Build MCP governance
+        run: dotnet build src/ArchenaAI.Common.MCP/ArchenaAI.Common.MCP.csproj --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test ArchenaAI.Common.Kernel.Tests/ArchenaAI.Common.Kernel.Tests.csproj --configuration Release --no-restore
