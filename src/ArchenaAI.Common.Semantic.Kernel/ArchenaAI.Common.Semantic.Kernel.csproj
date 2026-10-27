@@ -8,7 +8,7 @@
     <!-- ✅ These are project-unique details -->
     <PackageId>ArchenaAI.Common.SemanticKernel</PackageId>
     <Description>Common semantic kernel library for ArchenaAI agents. Powered by the Franz Framework.</Description>
-    <RepositoryUrl>https://dev.azure.com/AjnaTellus/ArchenaAI/_git/ArchenaAI.Common.SemanticKernel</RepositoryUrl>
+    <RepositoryUrl>https://github.com/bestacio89/ArchenaAI.Common</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
     <!-- 📦 Package publishing -->
@@ -60,7 +60,6 @@
   <!-- 📘 Documentation & build artifacts -->
   <ItemGroup>
     <None Include="docs\**\*" Pack="true" PackagePath="docs" />
-    <None Include="README.md" Pack="true" PackagePath="\\" />
   </ItemGroup>
 
   <Target Name="DebugPrintProps" BeforeTargets="BeforeBuild">
