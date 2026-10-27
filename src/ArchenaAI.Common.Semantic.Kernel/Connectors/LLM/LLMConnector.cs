@@ -52,7 +52,7 @@ namespace ArchenaAI.Common.Semantic.Kernel.Connectors.LLM
         public async Task<LLMResponse> SendAsync(LLMRequest request, CancellationToken ct = default)
         {
             if (request is null)
-                throw new Franz.Common.Errors.BusinessException("[LLM] The request payload cannot be null.");
+                throw new Franz.Common.Errors.BusinessException("llm.request.null", "[LLM] The request payload cannot be null.");
 
             JsonContent? payload = null;
             try
