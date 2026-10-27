@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- 🧩 Centralized configuration -->
-  <Import Project="..\..\Common.targets" />
+  <Import Project="..\..\build\common.targets" />
 
 
   <PropertyGroup>
