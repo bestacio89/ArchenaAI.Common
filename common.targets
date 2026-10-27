@@ -6,7 +6,7 @@
        Shared build policy for all ArchenaAI.Common modules.
 
        Imported by individual projects using:
-       <Import Project="..\..\build\common.targets" />
+       <Import Project="..\..\build\Common.targets" />
        ============================================================ -->
 
   <!-- ============================================================

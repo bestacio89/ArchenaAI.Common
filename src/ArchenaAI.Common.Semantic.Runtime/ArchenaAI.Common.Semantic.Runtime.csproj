@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\build\common.targets" />
+  <Import Project="..\..\Common.targets" />
 
   <ItemGroup>
     <ProjectReference Include="..\ArchenaAI.Common.Semantic.Kernel\ArchenaAI.Common.Semantic.Kernel.csproj" />
