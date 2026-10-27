@@ -1,3 +1,5 @@
+using ArchenaAI.Common.MCP.Abstractions;
+
 namespace ArchenaAI.Common.MCP.Models;
 
 /// <summary>
