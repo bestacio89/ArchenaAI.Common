@@ -1,6 +1,5 @@
 ﻿using ArchenaAI.Common.Semantic.Kernel.Configuration;
 using ArchenaAI.Common.Semantic.Kernel.Connectors.LLM.Models;
-using Franz.Common.Errors;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
@@ -48,17 +47,16 @@ namespace ArchenaAI.Common.Semantic.Kernel.Connectors.LLM
         /// <param name="request">The structured <see cref="LLMRequest"/> containing the prompt and parameters.</param>
         /// <param name="ct">A <see cref="CancellationToken"/> used to cancel the operation if necessary.</param>
         /// <returns>A <see cref="LLMResponse"/> containing the generated model output and metadata.</returns>
-        /// <exception cref="BusinessException">Thrown when the <paramref name="request"/> is null.</exception>
+        /// <exception cref="Franz.Common.Errors.BusinessException">Thrown when the <paramref name="request"/> is null.</exception>
         /// <exception cref="HttpRequestException">Thrown when the HTTP request fails or times out.</exception>
         public async Task<LLMResponse> SendAsync(LLMRequest request, CancellationToken ct = default)
         {
             if (request is null)
-                throw new BusinessException("[LLM] The request payload cannot be null.");
+                throw new Franz.Common.Errors.BusinessException("[LLM] The request payload cannot be null.");
 
-            JsonContent payload = null!;
+            JsonContent? payload = null;
             try
             {
-                // 🧠 Build the model payload dynamically
                 payload = JsonContent.Create(new
                 {
                     model = _options.Model,
@@ -72,7 +70,6 @@ namespace ArchenaAI.Common.Semantic.Kernel.Connectors.LLM
                     top_p = _options.TopP
                 });
 
-                // 🌐 Send the request
                 using var response = await _http
                     .PostAsync(new Uri(_options.Endpoint), payload, ct)
                     .ConfigureAwait(false);
@@ -89,7 +86,6 @@ namespace ArchenaAI.Common.Semantic.Kernel.Connectors.LLM
                     };
                 }
 
-                // 🧩 Parse JSON response (LLM provider-agnostic)
                 using var doc = JsonDocument.Parse(json);
                 var root = doc.RootElement;
 
@@ -97,22 +93,23 @@ namespace ArchenaAI.Common.Semantic.Kernel.Connectors.LLM
                 {
                     Id = root.TryGetProperty("id", out var idProp) ? idProp.GetString() : null,
                     Model = root.TryGetProperty("model", out var modelProp) ? modelProp.GetString() : _options.Model,
-                    Content = root.TryGetProperty("choices", out var choicesProp)
-        ? choicesProp[0].GetProperty("message").GetProperty("content").GetString()
-        : null,
+                    Content = root.TryGetProperty("choices", out var choicesProp) && choicesProp.GetArrayLength() > 0
+                        ? choicesProp[0].GetProperty("message").GetProperty("content").GetString()
+                        : null,
                     TotalTokens = root.TryGetProperty("usage", out var usageProp) &&
-                  usageProp.TryGetProperty("total_tokens", out var totalTokens)
-        ? totalTokens.GetInt32()
-        : null,
-                    PromptTokens = usageProp.TryGetProperty("prompt_tokens", out var promptTokens)
-        ? promptTokens.GetInt32()
-        : null,
-                    CompletionTokens = usageProp.TryGetProperty("completion_tokens", out var completionTokens)
-        ? completionTokens.GetInt32()
-        : null
+                                  usageProp.TryGetProperty("total_tokens", out var totalTokens)
+                        ? totalTokens.GetInt32()
+                        : null,
+                    PromptTokens = root.TryGetProperty("usage", out usageProp) &&
+                                   usageProp.TryGetProperty("prompt_tokens", out var promptTokens)
+                        ? promptTokens.GetInt32()
+                        : null,
+                    CompletionTokens = root.TryGetProperty("usage", out usageProp) &&
+                                       usageProp.TryGetProperty("completion_tokens", out var completionTokens)
+                        ? completionTokens.GetInt32()
+                        : null
                 };
 
-                // Safely populate metadata instead of reassigning it
                 llmResponse.Metadata["provider"] = _options.Provider;
                 llmResponse.Metadata["endpoint"] = _options.Endpoint;
                 llmResponse.Metadata["timestamp"] = DateTime.UtcNow;
